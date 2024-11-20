@@ -9,11 +9,11 @@ CURRENT_BLOCK=$(awk "/$START_MARKER/,/$END_MARKER/" /etc/hosts | grep -v "$START
 
 # Check if the block is entirely commented
 if echo "$CURRENT_BLOCK" | grep -qv '^#'; then
-    echo -e "\033[1;32mCurrently in Prod mode.\033[0m" # Lines are uncommented
-    MODE="Prod"
-else
-    echo -e "\033[1;31mCurrently in Local mode.\033[0m" # Lines are commented
+    echo -e "\033[1;32mCurrently in Local mode.\033[0m" # Lines are uncommented
     MODE="Local"
+else
+    echo -e "\033[1;31mCurrently in Prod mode.\033[0m" # Lines are commented
+    MODE="Prod"
 fi
 
 # Prompt the user
@@ -32,7 +32,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
             if ($0 ~ start) {print; in_block=1; next}
             if ($0 ~ end) {in_block=0; print; next}
             if (in_block) {
-                if (mode == "Local") {print substr($0, 2)} # Uncomment lines
+                if (mode == "Prod") {print substr($0, 2)} # Uncomment lines
                 else {print "#" $0}                       # Comment lines
             } else {
                 print
